@@ -5,7 +5,7 @@
 //  Created by David Murdock on 10/10/24.
 //
 
-//import Foundation
+import Foundation
 
 var testLessonText1 = "Lesson 1 text"
 var testLessonText2 = "Lesson 2 text"
@@ -36,9 +36,7 @@ struct LessonsModel {
         }
 
         mutating func toggleIsLearnComplete() {
-            print("made it here!")
             self.learn.isLearnCompleted.toggle()
-            print("learn \(self.learn)")
         }
         
         mutating func toggleIsStudyComplete(lesson: Lesson) {
@@ -65,7 +63,7 @@ struct LessonsModel {
     }
     
     enum QuestionType {
-        case treuFalse
+        case trueFalse
         case multipleChoice
         case fillInTheBlank
     }

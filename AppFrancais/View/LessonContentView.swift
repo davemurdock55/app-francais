@@ -8,10 +8,9 @@ import SwiftUI
 
 struct LessonContentView: View {
 //    @Bindable var lesson: LessonsModel.Lesson
+//    @EnvironmentObject var lessonViewModel: LessonsViewModel
     var lesson: LessonsModel.Lesson
-    @EnvironmentObject var lessonViewModel: LessonsViewModel
     
-    // hi there, just commenting to hopefully commit all of this
     
     @State private var selectedTab = 0
     

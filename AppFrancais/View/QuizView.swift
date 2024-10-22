@@ -12,6 +12,7 @@ struct QuizView: View {
     
 //    @Binding var lesson: LessonsModel.Lesson
 //    @EnvironmentObject var lessonViewModel: LessonsViewModel
+//    var lesson: LessonsModel.Lesson
     var lesson: LessonsModel.Lesson
    
     var body: some View {

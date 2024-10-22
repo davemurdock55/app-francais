@@ -10,7 +10,7 @@ import Foundation
 @Observable class LessonsViewModel: ObservableObject {
     
     // MARK: - Properties
-    private var lessonsModel = LessonsModel()
+    var lessonsModel = LessonsModel()
     
     var currentLesson: LessonsModel.Lesson?
     
@@ -22,19 +22,20 @@ import Foundation
     
     // MARK: - User Intents
     func handleLearnCompleteTap(num: Int) {
-        guard var selectedLesson = getLesson(num: num) else {
+        guard let index = getLessonIndex(num: num) else {
             print("Lesson not found")
             return
         }
-        print(selectedLesson.learn)
-        selectedLesson.toggleIsLearnComplete()
+        lessonsModel.lessons[index].toggleIsLearnComplete()
+        objectWillChange.send()
     }
     
     
     // MARK: - Helpers
-    private func getLesson(num: Int) -> LessonsModel.Lesson? {
-        return lessons.first(where: {$0.num == num})
+    private func getLessonIndex(num: Int) -> Int? {
+        return lessonsModel.lessons.firstIndex(where: {$0.num == num})
     }
+    
     
     func setCurrentLesson(selectedLesson: LessonsModel.Lesson) -> Void {
         currentLesson = selectedLesson

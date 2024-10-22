@@ -17,12 +17,22 @@ struct LearnView: View {
     var body: some View {
         VStack {
             Text("\(lesson.learn.lessonText)")
+            Text("Learn Completed? \(lesson.learn.isLearnCompleted)")
             
-            Button {
-                lessonViewModel.handleLearnCompleteTap(num: lesson.num)
-            } label: {
-                !lesson.learn.isLearnCompleted ? Label("Complete", systemImage: "checkmark.circle") : Label("UnComplete", systemImage: "checkmark.circle")
-            }
+            CompleteButtonView(
+                isCompleted: lesson.learn.isLearnCompleted,
+                handlePress: { lessonViewModel.handleLearnCompleteTap(num: lesson.num) }
+            )
+//            Button {
+//                lessonViewModel.handleLearnCompleteTap(num: lesson.num)
+//            } label: {
+//                !lesson.learn.isLearnCompleted ? Label("MARK AS COMPLETE", systemImage: "checkmark.circle") : Label("MARK AS INCOMPLETE", systemImage: "checkmark.circle")
+//            }
+//            .padding()
+//            .background(!lesson.learn.isLearnCompleted ? Color.green : Color.gray)
+//            .foregroundColor(.white)
+//            .cornerRadius(10)
+//            .opacity(!lesson.learn.isLearnCompleted ? 1.0 : 0.5)
         }
        
     }

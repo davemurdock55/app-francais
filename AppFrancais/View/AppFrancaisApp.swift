@@ -11,7 +11,7 @@ import SwiftUI
 struct AppFrancaisApp: App {
     var body: some Scene {
         WindowGroup {
-            LessonsView(lessonsViewModel: LessonsViewModel()).environmentObject(LessonsViewModel())
+            LessonsView().environmentObject(LessonsViewModel())
         }
     }
 }

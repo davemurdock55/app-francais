@@ -9,8 +9,8 @@ import SwiftUI
 
 struct LessonsView: View {
     
-    @Bindable var lessonsViewModel: LessonsViewModel
-//    @EnvironmentObject var lessonViewModel: LessonsViewModel
+//    @Bindable var lessonsViewModel: LessonsViewModel
+    @EnvironmentObject var lessonsViewModel: LessonsViewModel
     
     var body: some View {
         GeometryReader { geometry in
@@ -58,5 +58,5 @@ struct LessonsView: View {
 }
 
 #Preview {
-    LessonsView(lessonsViewModel: LessonsViewModel()).environmentObject(LessonsViewModel())
+    LessonsView().environmentObject(LessonsViewModel())
 }
