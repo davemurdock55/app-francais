@@ -11,7 +11,7 @@ struct LessonContentView: View {
     var lesson: LessonsModel.Lesson
     @EnvironmentObject var lessonViewModel: LessonsViewModel
     
-    
+    // hi there, just commenting to hopefully commit all of this
     
     @State private var selectedTab = 0
     
