@@ -26,7 +26,28 @@ import Foundation
             print("Lesson not found")
             return
         }
+        
         lessonsModel.lessons[index].toggleIsLearnComplete()
+//        objectWillChange.send()
+    }
+    
+    func handleStudyCompleteTap(num: Int) {
+        guard let index = getLessonIndex(num: num) else {
+            print("Lesson not found")
+            return
+        }
+        
+        lessonsModel.lessons[index].toggleIsStudyComplete()
+        objectWillChange.send()
+    }
+    
+    func handleQuizCompleteTap(num: Int) {
+        guard let index = getLessonIndex(num: num) else {
+            print("Lesson not found")
+            return
+        }
+        
+        lessonsModel.lessons[index].toggleIsQuizComplete()
         objectWillChange.send()
     }
     

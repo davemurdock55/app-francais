@@ -9,7 +9,6 @@ import Foundation
 
 typealias VocabListType = [(String, String)]
 
-
 struct LessonsModel {
     // MARK: - Constants
     
@@ -18,14 +17,17 @@ struct LessonsModel {
         var id: Int { num }
         let num: Int
         let name: String
-        var isLessonCompleted: Bool = false
-        var learn: Learn
+        let lessonText: String
         var vocabList: VocabListType
+        var isLessonCompleted: Bool = false
+        var isLearnCompleted: Bool = false
+        var isStudyCompleted: Bool = false
+        var isQuizCompleted: Bool = false
         
-        init(num: Int, name: String, learn: Learn, vocabList: VocabListType) {
+        init(num: Int, name: String, lessonText: String, vocabList: VocabListType) {
             self.num = num
             self.name = name
-            self.learn = learn
+            self.lessonText = lessonText
             self.vocabList = vocabList
         }
         
@@ -34,45 +36,17 @@ struct LessonsModel {
         }
 
         mutating func toggleIsLearnComplete() {
-            self.learn.isLearnCompleted.toggle()
+            self.isLearnCompleted.toggle()
         }
         
-        mutating func toggleIsStudyComplete(lesson: Lesson) {
-            
+        mutating func toggleIsStudyComplete() {
+            self.isStudyCompleted.toggle()
         }
         
-        mutating func toggleIsQuizComplete(lesson: Lesson) {
-            
+        mutating func toggleIsQuizComplete() {
+            self.isQuizCompleted.toggle()
         }
     }
-    
-    struct Learn {
-        var isLearnCompleted: Bool = false
-        let lessonText: String
-    }
-    
-    struct Study {
-        var isStudyCompleted: Bool = false
-        let flashcards: [[String:String]]
-    }
-    
-    struct Quiz {
-        var isQuizCompleted: Bool = false
-    }
-    
-    enum QuestionType {
-        case trueFalse
-        case multipleChoice
-        case fillInTheBlank
-    }
-    
-    struct Question {
-        var questionText: String
-        var correctAnswerIndex: Int
-        var questionType: QuestionType
-        var answers: [String]? // nillable because it could be a different kind of quiz
-    }
-
     
     // MARK: - Properties
     var lessons: [Lesson]
@@ -84,61 +58,61 @@ struct LessonsModel {
             Lesson(
                 num: 1,
                 name: "Basic Greetings and Farewells",
-                learn: Learn(isLearnCompleted: false, lessonText: lesson1Text),
+                lessonText: lesson1Text,
                 vocabList: lesson1Vocab
             ),
             Lesson(
                 num: 2,
                 name: "Common Phrases",
-                learn: Learn(isLearnCompleted: false, lessonText: lesson2Text),
+                lessonText: lesson2Text,
                 vocabList: lesson2Vocab
             ),
             Lesson(
                 num: 3,
                 name: "Numbers",
-                learn: Learn(isLearnCompleted: false, lessonText: lesson3Text),
+                lessonText: lesson3Text,
                 vocabList: lesson3Vocab
             ),
             Lesson(
                 num: 4,
                 name: "Colors",
-                learn: Learn(isLearnCompleted: false, lessonText: lesson4Text),
+                lessonText: lesson4Text,
                 vocabList: lesson4Vocab
             ),
             Lesson(
                 num: 5,
                 name: "Family Members",
-                learn: Learn(isLearnCompleted: false, lessonText: lesson5Text),
+                lessonText: lesson5Text,
                 vocabList: lesson5Vocab
             ),
             Lesson(
                 num: 6,
                 name: "Food and Drink",
-                learn: Learn(isLearnCompleted: false, lessonText: lesson6Text),
+                lessonText: lesson6Text,
                 vocabList: lesson6Vocab
             ),
             Lesson(
                 num: 7,
                 name: "Common Adjectives",
-                learn: Learn(isLearnCompleted: false, lessonText: lesson7Text),
+                lessonText: lesson7Text,
                 vocabList: lesson7Vocab
             ),
             Lesson(
                 num: 8,
                 name: "Days of the Week",
-                learn: Learn(isLearnCompleted: false, lessonText: lesson8Text),
+                lessonText: lesson8Text,
                 vocabList: lesson8Vocab
             ),
             Lesson(
                 num: 9,
                 name: "The Weather",
-                learn: Learn(isLearnCompleted: false, lessonText: lesson9Text),
+                lessonText: lesson9Text,
                 vocabList: lesson9Vocab
             ),
             Lesson(
                 num: 10,
                 name: "Common Verbs",
-                learn: Learn(isLearnCompleted: false, lessonText: lesson10Text),
+                lessonText: lesson10Text,
                 vocabList: lesson10Vocab
             ),
         ]

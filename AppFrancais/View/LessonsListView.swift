@@ -38,13 +38,29 @@ struct LessonsListView: View {
                     List(lessonsViewModel.lessons, id: \.self.num) { lesson in
                         // had some help from the AI to get the NavigationLink working properly (and a bit of the inside stuff)
                         NavigationLink(destination: LessonContentView(lesson: lesson)) {
-                            VStack(alignment: .leading) {
-                                Text("Lesson \(lesson.num)")
-                                    .font(.headline)
-                                Text(lesson.name)
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }.padding(.vertical, 16)
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text("Lesson \(lesson.num)")
+                                        .font(.headline)
+                                    Text(lesson.name)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                }.padding(.vertical, 16)
+                                
+                                Spacer()
+                                
+                                HStack {
+                                    Image(systemName: lesson.isLearnCompleted ? "graduationcap.circle.fill" : "graduationcap.circle")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(lesson.isLearnCompleted ? .green : .blue)
+                                    Image(systemName: lesson.isStudyCompleted ? "rectangle.on.rectangle.circle.fill" : "rectangle.on.rectangle.circle")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(lesson.isStudyCompleted ? .green : .gray)
+                                    Image(systemName: lesson.isQuizCompleted ? "questionmark.circle.fill" : "questionmark.circle")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(lesson.isQuizCompleted ? .green : .red)
+                                }
+                            }
                         }
                     }
                     .listStyle(.plain)

@@ -11,6 +11,8 @@ struct LessonContentView: View {
     
     @State private var selectedTab = 0
     
+    
+    
     var body: some View {
         VStack {
             Picker("Select a tab", selection: $selectedTab) {
@@ -34,7 +36,7 @@ struct LessonContentView: View {
                     .tag(2)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            
         }
+        .navigationTitle(lesson.name)
     }
 }

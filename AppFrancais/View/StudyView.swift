@@ -19,11 +19,16 @@ struct StudyView: View {
         UIPageControl.appearance().pageIndicatorTintColor = .lightGray
     }
     
+    // could possibly use onAppear() to do the shuffling each time the study activity loads
+    
     var body: some View {
         VStack {
-//            Text("Study")
-//                .font(.largeTitle)
-            Text("\(lesson.name)").font(.largeTitle)
+//            Text("\(lesson.name)").font(.largeTitle)
+            HStack {
+                Image(systemName: "rectangle.on.rectangle.circle")
+                    .foregroundColor(!lesson.isStudyCompleted ? .gray : .green)
+                Text("Study")
+            }.font(.title)
             
             TabView(selection: $currentIndex) {
                 ForEach(lesson.vocabList.indices, id: \.self) { index in
@@ -83,11 +88,11 @@ struct StudyView: View {
             
             Spacer()
             
-            // Uncomment and modify the below if you have a CompleteButtonView for Study completion
-            // CompleteButtonView(
-            //     isCompleted: lesson.study.isStudyCompleted,
-            //     handlePress: { lessonViewModel.handleStudyCompleteTap(num: lesson.num) }
-            // )
+            CompleteButtonView(
+                activity: "Study",
+                isCompleted: lesson.isStudyCompleted,
+                handlePress: { lessonViewModel.handleStudyCompleteTap(num: lesson.num) }
+            )
         }
     }
     

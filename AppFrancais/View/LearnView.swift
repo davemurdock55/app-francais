@@ -14,10 +14,15 @@ struct LearnView: View {
     var body: some View {
         VStack {
             ScrollView {
-                Text("\(lesson.name)").font(.largeTitle)
+//                Text("\(lesson.name)").font(.largeTitle)
+                HStack {
+                    Image(systemName: "graduationcap.circle")
+                        .foregroundColor(!lesson.isLearnCompleted ? .blue : .green)
+                    Text("Learn")
+                }.font(.title)
                 
                 VStack(alignment: .leading) {
-                    Text("\(lesson.learn.lessonText)")
+                    Text("\(lesson.lessonText)")
                     
                     Text("Vocab: ").padding(.vertical, 10).fontWeight(.bold).underline()
                     ForEach(lesson.vocabList, id: \.0) { vocab in
@@ -29,7 +34,8 @@ struct LearnView: View {
             Spacer()
             
             CompleteButtonView(
-                isCompleted: lesson.learn.isLearnCompleted,
+                activity: "Learn",
+                isCompleted: lesson.isLearnCompleted,
                 handlePress: { lessonViewModel.handleLearnCompleteTap(num: lesson.num) }
             )
             

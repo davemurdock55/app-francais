@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CompleteButtonView: View {
-    
+    let activity: String
     let isCompleted: Bool
     let handlePress: () -> Void
     
@@ -18,7 +18,7 @@ struct CompleteButtonView: View {
                 handlePress()
             }
         } label: {
-            !isCompleted ? Label("MARK AS COMPLETE", systemImage: "checkmark.circle") : Label("MARK AS INCOMPLETE", systemImage: "checkmark.circle.fill")
+            !isCompleted ? Label("MARK \(activity.uppercased()) AS COMPLETE", systemImage: "checkmark.circle") : Label("MARK \(activity.uppercased()) AS INCOMPLETE", systemImage: "checkmark.circle.fill")
         }
         .padding()
         .background(!isCompleted ? Color.green : Color.gray)
