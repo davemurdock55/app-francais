@@ -10,10 +10,10 @@ import Foundation
 typealias ItemProgress = [String: Bool]
 typealias LessonProgress = [String: ItemProgress]
 
-let myProgress = [
-    "topic1": ["read": true, "studied": true, "passed": true],
-    "topic2": ["read": true, "studied": false, "passed": false],
-]
+//let myProgress = [
+//    "lesson1": ["learnComplete": true, "studyComplete": true, "quizComplete": true],
+//    "lesson2": ["learnComplete": true, "studyComplete": false, "quizComplete": false],
+//]
 
 struct PersistentProgress {
 
@@ -29,12 +29,18 @@ struct PersistentProgress {
         }
     }
     
-    mutating func updateProgress(for lessonID: String, item: String, isCompleted: Bool) {
-           if progress[lessonID] == nil {
-               progress[lessonID] = [:]
-           }
-           progress[lessonID]?[item] = isCompleted
-       }
+//    mutating func updateProgress(for lessonID: String, item: String, isCompleted: Bool) {
+//           if progress[lessonID] == nil {
+//               progress[lessonID] = [:]
+//           }
+//           progress[lessonID]?[item] = isCompleted
+//       }
+//
+    
+//    What Bobo did
+//    private func saveLessons() {
+//        PersistenceService.shared.saveData(lessons, forKey: persistenceKey)
+//    }
     
     private struct Key {
         static let progress = "Progress"

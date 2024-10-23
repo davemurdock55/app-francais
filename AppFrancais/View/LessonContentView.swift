@@ -23,6 +23,8 @@ struct LessonContentView: View {
             
             Spacer()
             
+//            Text("\(lesson.name)").font(.largeTitle)
+            
             TabView(selection: $selectedTab) {
                 LearnView(lesson: lesson)
                     .tag(0)

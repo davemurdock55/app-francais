@@ -13,26 +13,29 @@ struct LearnView: View {
     
     var body: some View {
         VStack {
-            Text("\(lesson.name)").font(.largeTitle)
-            
-            VStack(alignment: .leading) {
-                Text("\(lesson.learn.lessonText)")
+            ScrollView {
+                Text("\(lesson.name)").font(.largeTitle)
                 
-                Text("Vocab: ").padding(.top, 10).fontWeight(.bold)
-                ForEach(lesson.vocabList, id: \.0) { vocab in
-                    Text("\(vocab.0) – \(vocab.1)")
-                }
-            }.padding()
-
+                VStack(alignment: .leading) {
+                    Text("\(lesson.learn.lessonText)")
+                    
+                    Text("Vocab: ").padding(.vertical, 10).fontWeight(.bold).underline()
+                    ForEach(lesson.vocabList, id: \.0) { vocab in
+                        Text("\(vocab.0)").bold() + Text(" – \(vocab.1)")
+                    }
+                }.padding()
+            }
+            
             Spacer()
             
             CompleteButtonView(
                 isCompleted: lesson.learn.isLearnCompleted,
                 handlePress: { lessonViewModel.handleLearnCompleteTap(num: lesson.num) }
             )
+            
         }
-       
     }
+    
 }
 
 

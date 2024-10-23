@@ -14,8 +14,8 @@ struct QuizView: View {
    
     var body: some View {
         VStack {
-            Text("Quiz!")
-            
+            Text("\(lesson.name)").font(.largeTitle)
+            Text("Quiz")
             Spacer()
             
 //            CompleteButtonView(

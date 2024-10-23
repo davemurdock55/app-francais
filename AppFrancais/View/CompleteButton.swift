@@ -14,7 +14,9 @@ struct CompleteButtonView: View {
     
     var body: some View {
         Button {
-            handlePress()
+            withAnimation {
+                handlePress()
+            }
         } label: {
             !isCompleted ? Label("MARK AS COMPLETE", systemImage: "checkmark.circle") : Label("MARK AS INCOMPLETE", systemImage: "checkmark.circle.fill")
         }
