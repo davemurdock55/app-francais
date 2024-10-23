@@ -7,10 +7,7 @@
 import SwiftUI
 
 struct LessonContentView: View {
-//    @Bindable var lesson: LessonsModel.Lesson
-//    @EnvironmentObject var lessonViewModel: LessonsViewModel
     var lesson: LessonsModel.Lesson
-    
     
     @State private var selectedTab = 0
     
@@ -34,7 +31,8 @@ struct LessonContentView: View {
                 QuizView(lesson: lesson)
                     .tag(2)
             }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            
         }
     }
 }

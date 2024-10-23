@@ -9,12 +9,21 @@ import SwiftUI
 
 
 struct StudyView: View {
-    
-//    @Binding var lesson: LessonsModel.Lesson
-//    @EnvironmentObject var lessonViewModel: LessonsViewModel
+    @EnvironmentObject var lessonViewModel: LessonsViewModel
     var lesson: LessonsModel.Lesson
    
     var body: some View {
-        Text("Study Content")
+        VStack {
+            Text("Study!")
+            
+            
+            
+            Spacer()
+            
+//            CompleteButtonView(
+//                isCompleted: lesson.study.isStudyCompleted,
+//                handlePress: { lessonViewModel.handleStudyCompleteTap(num: lesson.num) }
+//            )
+        }
     }
 }

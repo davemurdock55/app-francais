@@ -1,5 +1,5 @@
 //
-//  ViewModel.swift
+//  LessonsViewModel.swift
 //  AppFrancais
 //
 //  Created by David Murdock on 10/10/24.
@@ -10,9 +10,9 @@ import Foundation
 @Observable class LessonsViewModel: ObservableObject {
     
     // MARK: - Properties
-    var lessonsModel = LessonsModel()
+    private var lessonsModel = LessonsModel()
     
-    var currentLesson: LessonsModel.Lesson?
+//    var currentLesson: LessonsModel.Lesson?
     
     // MARK: - Model access
     // AI did help me with this a bit
@@ -37,9 +37,9 @@ import Foundation
     }
     
     
-    func setCurrentLesson(selectedLesson: LessonsModel.Lesson) -> Void {
-        currentLesson = selectedLesson
-        print("set the current lesson to: \(currentLesson?.num ?? -1)")
-    }
+//    func setCurrentLesson(selectedLesson: LessonsModel.Lesson) -> Void {
+//        currentLesson = selectedLesson
+//        print("set the current lesson to: \(currentLesson?.num ?? -1)")
+//    }
     
 }

@@ -7,32 +7,29 @@
 
 import SwiftUI
 
-
 struct LearnView: View {
-    
-//    @Bindable var lesson: LessonsModel.Lesson
     @EnvironmentObject var lessonViewModel: LessonsViewModel
     var lesson: LessonsModel.Lesson
     
     var body: some View {
         VStack {
-            Text("\(lesson.learn.lessonText)")
-            Text("Learn Completed? \(lesson.learn.isLearnCompleted)")
+            Text("\(lesson.name)").font(.largeTitle)
+            
+            VStack(alignment: .leading) {
+                Text("\(lesson.learn.lessonText)")
+                
+                Text("Vocab: ").padding(.top, 10).fontWeight(.bold)
+                ForEach(lesson.vocabList, id: \.0) { vocab in
+                    Text("\(vocab.0) – \(vocab.1)")
+                }
+            }.padding()
+
+            Spacer()
             
             CompleteButtonView(
                 isCompleted: lesson.learn.isLearnCompleted,
                 handlePress: { lessonViewModel.handleLearnCompleteTap(num: lesson.num) }
             )
-//            Button {
-//                lessonViewModel.handleLearnCompleteTap(num: lesson.num)
-//            } label: {
-//                !lesson.learn.isLearnCompleted ? Label("MARK AS COMPLETE", systemImage: "checkmark.circle") : Label("MARK AS INCOMPLETE", systemImage: "checkmark.circle")
-//            }
-//            .padding()
-//            .background(!lesson.learn.isLearnCompleted ? Color.green : Color.gray)
-//            .foregroundColor(.white)
-//            .cornerRadius(10)
-//            .opacity(!lesson.learn.isLearnCompleted ? 1.0 : 0.5)
         }
        
     }

@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  LessonsListView.swift
 //  AppFrancais
 //
 //  Created by David Murdock on 10/10/24.
@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-struct LessonsView: View {
-    
-//    @Bindable var lessonsViewModel: LessonsViewModel
+struct LessonsListView: View {
     @EnvironmentObject var lessonsViewModel: LessonsViewModel
     
     var body: some View {
@@ -58,5 +56,5 @@ struct LessonsView: View {
 }
 
 #Preview {
-    LessonsView().environmentObject(LessonsViewModel())
+    LessonsListView().environmentObject(LessonsViewModel())
 }

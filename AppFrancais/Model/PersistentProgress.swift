@@ -16,15 +16,7 @@ let myProgress = [
 ]
 
 struct PersistentProgress {
-    // most of what's here probably won't work with my code, but you may need to do something like this
 
-//    private static func defaultProgress() -> LessonProgress {
-//        var defaultProgress: LessonProgress = [:]
-//        
-//        for lesson in lessonsModel.lessons {
-//            defaultProgress[lesson] = [:]
-//        }
-//    }
     
     private static func readProgress() -> LessonProgress {
         UserDefaults.standard.dictionary(forKey: Key.progress) as? LessonProgress ?? LessonProgress()
@@ -36,13 +28,13 @@ struct PersistentProgress {
             UserDefaults.standard.set(progress, forKey: Key.progress)
         }
     }
-
-// could do something like this if you wanted to store each lesson separately in the user defaults
-//    private enum ItemKey: String {
-//        case lesson // read
-//        case practice // study
-//        case quiz // quiz
-//    }
+    
+    mutating func updateProgress(for lessonID: String, item: String, isCompleted: Bool) {
+           if progress[lessonID] == nil {
+               progress[lessonID] = [:]
+           }
+           progress[lessonID]?[item] = isCompleted
+       }
     
     private struct Key {
         static let progress = "Progress"

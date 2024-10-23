@@ -9,13 +9,19 @@ import SwiftUI
 
 
 struct QuizView: View {
-    
-//    @Binding var lesson: LessonsModel.Lesson
-//    @EnvironmentObject var lessonViewModel: LessonsViewModel
-//    var lesson: LessonsModel.Lesson
+    @EnvironmentObject var lessonViewModel: LessonsViewModel
     var lesson: LessonsModel.Lesson
    
     var body: some View {
-        Text("Quiz Content")
+        VStack {
+            Text("Quiz!")
+            
+            Spacer()
+            
+//            CompleteButtonView(
+//                isCompleted: lesson.quiz.isQuizCompleted,
+//                handlePress: { lessonViewModel.handleQuizCompleteTap(num: lesson.num) }
+//            )
+        }
     }
 }

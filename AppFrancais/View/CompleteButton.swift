@@ -16,7 +16,7 @@ struct CompleteButtonView: View {
         Button {
             handlePress()
         } label: {
-            !isCompleted ? Label("MARK AS COMPLETE", systemImage: "checkmark.circle") : Label("MARK AS INCOMPLETE", systemImage: "checkmark.circle")
+            !isCompleted ? Label("MARK AS COMPLETE", systemImage: "checkmark.circle") : Label("MARK AS INCOMPLETE", systemImage: "checkmark.circle.fill")
         }
         .padding()
         .background(!isCompleted ? Color.green : Color.gray)
