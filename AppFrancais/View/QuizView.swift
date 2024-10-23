@@ -27,6 +27,7 @@ struct QuizView: View {
             
             Text("Score: \(score)")
             
+            // AI Helped with this
             Form {
                 if currentQuestionIndex < lesson.vocabList.count {
                     let question = lesson.vocabList[currentQuestionIndex]
