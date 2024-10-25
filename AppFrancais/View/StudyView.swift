@@ -12,6 +12,7 @@ struct StudyView: View {
     var lesson: LessonsModel.Lesson
     
     @State private var currentIndex = 0
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     init(lesson: LessonsModel.Lesson) {
         self.lesson = lesson
@@ -23,78 +24,96 @@ struct StudyView: View {
     
     var body: some View {
         VStack {
-//            Text("\(lesson.name)").font(.largeTitle)
-            HStack {
-                Image(systemName: "rectangle.on.rectangle.circle")
-                    .foregroundColor(!lesson.isStudyCompleted ? .gray : .green)
-                Text("Study")
-            }.font(.title)
-            
-            TabView(selection: $currentIndex) {
-                ForEach(lesson.vocabList.indices, id: \.self) { index in
-                    FlashcardView(vocab: lesson.vocabList[index])
-                        .tag(index)
-                }
-                .padding()
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-            .accentColor(.red)
-            .background(Constants.flashCardsBackgroundColor)
-            .cornerRadius(10)
-            .padding()
-            
-            HStack {
-                Button {
-                    if currentIndex > 0 {
-                        withAnimation {
-                            currentIndex -= 1
+            ScrollView {
+                //            Text("\(lesson.name)").font(.largeTitle)
+                HStack {
+                    Image(systemName: "rectangle.on.rectangle.circle")
+                        .foregroundColor(!lesson.isStudyCompleted ? .gray : .green)
+                    Text("Study")
+                }.font(.title)
+                
+                
+                VStack {
+                    GeometryReader { geometry in
+                        VStack {
+                            TabView(selection: $currentIndex) {
+                                // learned .indices from ChatGPT before you mentioned it in the midterm review
+                                ForEach(lesson.vocabList.indices, id: \.self) { index in
+                                    FlashcardView(vocab: lesson.vocabList[index])
+                                        .tag(index)
+                                        .padding()
+                                }
+                            }
+                            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+                            .background(Constants.flashCardsBackgroundColor)
+                            .cornerRadius(10)
+                            // this shrinks the gray area
+//                            .frame(height: geometry.size.height - 50)
                         }
+                        .frame(height: geometry.size.height)
                     }
-                } label: {
-                    HStack {
-                        Image(systemName: "chevron.backward.circle")
-                        Text("Previous")
+                    .frame(height: 400)  // Set fixed height for the flashcards container
+                }.padding(.horizontal)
+                
+                HStack {
+                    Button {
+                        if currentIndex > 0 {
+                            withAnimation {
+                                currentIndex -= 1
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.backward.circle")
+                            Text("Previous")
+                        }
+                        .padding()
+                        .frame(width: 150)
+                        .background(.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                     }
-                    .padding()
-                    .frame(width: 150)
-                    .background(.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                }
+                    
+                    
+                    Spacer()
+                    
+                    Button {
+                        if currentIndex < lesson.vocabList.count - 1 {
+                            withAnimation {
+                                currentIndex += 1
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Text("Next")
+                            Image(systemName: "chevron.forward.circle")
+                        }
+                        .padding()
+                        .frame(width: 150)
+                        .background(.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                    }
+                    
+                }.padding()
                 
                 
                 Spacer()
-                
-                Button {
-                    if currentIndex < lesson.vocabList.count - 1 {
-                        withAnimation {
-                            currentIndex += 1
-                        }
-                    }
-                } label: {
-                    HStack {
-                        Text("Next")
-                        Image(systemName: "chevron.forward.circle")
-                    }
-                    .padding()
-                    .frame(width: 150)
-                    .background(.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                }
-                
-            }.padding()
-            
-            
-            Spacer()
-            
-            CompleteButtonView(
-                activity: "Study",
-                isCompleted: lesson.isStudyCompleted,
-                handlePress: { lessonViewModel.handleStudyCompleteTap(num: lesson.num) }
-            )
-        }
+            }
+                CompleteButtonView(
+                    activity: "Study",
+                    isCompleted: lesson.isStudyCompleted,
+                    handlePress: { lessonViewModel.handleStudyCompleteTap(num: lesson.num) }
+                )
+            }
+            .onAppear {
+                lessonViewModel.shuffleVocab(for: lesson.num)
+            }
+
     }
+        
+    
+
     
     // MARK: - Drawing Constants
     private struct Constants {

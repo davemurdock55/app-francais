@@ -24,6 +24,12 @@ import Foundation
     }
     
     // MARK: - User Intents
+    func shuffleVocab(for lessonNum: Int) {
+        if let index = getLessonIndex(num: lessonNum) {
+            lessonsModel.lessons[index].vocabList.shuffle()
+        }
+    }
+    
     func handleLearnCompleteTap(num: Int) {
         if let index = getLessonIndex(num: num) {
             lessonsModel.lessons[index].toggleIsLearnComplete()

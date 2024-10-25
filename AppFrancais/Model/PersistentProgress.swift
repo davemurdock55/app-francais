@@ -15,15 +15,15 @@ struct PersistentProgress {
     private static var lessonsModel = LessonsModel()
 
     // To set a default persistant state:
-       private static func defaultProgress() -> LessonProgress {
-           var defaultProgress: LessonProgress = [:]
+    private static func defaultProgress() -> LessonProgress {
+       var defaultProgress: LessonProgress = [:]
 
-           for lesson in lessonsModel.lessons {
-               defaultProgress["lesson\(lesson.num)"] = ["isLearnCompleted": false, "isStudyCompleted": false, "isQuizCompleted": false]
-           }
-           
-           return defaultProgress
+       for lesson in lessonsModel.lessons {
+           defaultProgress["lesson\(lesson.num)"] = ["isLearnCompleted": false, "isStudyCompleted": false, "isQuizCompleted": false]
        }
+       
+       return defaultProgress
+    }
     
     private static func readProgress() -> LessonProgress {
         UserDefaults.standard.dictionary(forKey: Key.progress) as? LessonProgress ?? defaultProgress()

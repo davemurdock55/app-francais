@@ -8,7 +8,20 @@
 import SwiftUI
 
 struct Cardify: ViewModifier {
-    let isFaceUp: Bool
+    var isFrenchSide: Bool {
+        rotation < 0
+    }
+    
+    var animatableData: Double {
+        get { rotation }
+        set { rotation = newValue }
+    }
+    
+    var rotation: Double
+    
+    init(isFrenchSide: Bool) {
+        rotation = isFrenchSide ? 180 : 0
+    }
     
     func body(content: Content) -> some View {
         GeometryReader { geometry in
@@ -18,9 +31,19 @@ struct Cardify: ViewModifier {
                             radius: Constants.dropShadowRadius,
                             x: Constants.dropShadowX,
                             y: Constants.dropShadowY)
+//                if isFrenchSide {
+//                    content
+//                        .rotation3DEffect(Angle.degrees(180), axis: (0, 1, 0))
+//                } else {
+//                    content
+//                        .rotation3DEffect(Angle.degrees(0), axis: (0, 1, 0))
+//                }
+                
                 content
+                    .rotation3DEffect(Angle.degrees(rotation), axis: (0, 1, 0))
             }
         }
+        .rotation3DEffect(Angle.degrees(rotation), axis: (0, 1, 0))
     }
     
     
@@ -31,16 +54,10 @@ struct Cardify: ViewModifier {
         static let dropShadowX: CGFloat = 0
         static let dropShadowY: CGFloat = 5
     }
-    
-    
-//    private func cornerRadius(for size: CGSize) -> Double {
-//        min(size.width, size.height) * 0.08
-//    }
-
 }
 
 extension View {
     func cardify(isFaceUp: Bool) -> some View {
-        modifier(Cardify(isFaceUp: isFaceUp))
+        modifier(Cardify(isFrenchSide: isFaceUp))
     }
 }
