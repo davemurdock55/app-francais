@@ -19,6 +19,8 @@ struct LessonsModel {
         let name: String
         let lessonText: String
         var vocabList: VocabListType
+        var highScore: Int = 0
+        var mostRecentScore: Int = 0
         var isLessonCompleted: Bool = false
         var isLearnCompleted: Bool = false
         var isStudyCompleted: Bool = false
@@ -45,6 +47,14 @@ struct LessonsModel {
         
         mutating func toggleIsQuizComplete() {
             self.isQuizCompleted.toggle()
+        }
+        
+        mutating func updateHighScore(score: Int) {
+            self.highScore = score
+        }
+        
+        mutating func updateMostRecentScore(score: Int) {
+            self.mostRecentScore = score
         }
     }
     
@@ -138,8 +148,8 @@ struct LessonsModel {
         ("Bonsoir", "Good evening"),
         ("Bonne nuit", "Good night"),
         ("Comment ça va?", "How are you?"),
-        ("Ça va bien", "I’m fine"),
-        ("À bientôt", "See you later")
+        ("Ça va bien", "I’m doing well"),
+        ("À bientôt", "See you soon")
     ]
 
 

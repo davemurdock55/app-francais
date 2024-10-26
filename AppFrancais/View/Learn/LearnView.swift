@@ -36,7 +36,7 @@ struct LearnView: View {
             CompleteButtonView(
                 activity: "Learn",
                 isCompleted: lesson.isLearnCompleted,
-                handlePress: { lessonViewModel.handleLearnCompleteTap(num: lesson.num) }
+                handlePress: { lessonViewModel.handleLearnCompleteTap(for: lesson.num) }
             )
             
         }

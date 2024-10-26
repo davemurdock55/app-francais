@@ -47,6 +47,7 @@ struct FlashcardView: View {
             cardRotation += 180
         }
         
+        // did learn about DispatchQueue with asyncAfter() using AI
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.animationDuration / 2) {
             isFrenchSide.toggle()
         }
@@ -55,7 +56,7 @@ struct FlashcardView: View {
     // MARK: - Drawing Constants
     private struct Constants {
         static let aspectRatio: Double = 3/2
-        static let animationDuration: Double = 0.5
+        static let animationDuration: Double = 0.29
         
         static let dropShadowColor: Color = Color(red: 0.90, green: 0.90, blue: 0.90)
         static let dropShadowRadius: CGFloat = 5

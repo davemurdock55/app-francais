@@ -11,10 +11,13 @@ import Foundation
     
     // MARK: - Properties
     private var persistentProgress = PersistentProgress()
+    private var persistentScores = PersistentScores()
     private var lessonsModel = LessonsModel()
+    private var soundPlayer = SoundPlayer()
     
     init() {
-        loadLessonProgress()
+        loadPersistentLessonProgress()
+        loadPersistentScores()
     }
     
     // MARK: - Model access
@@ -24,16 +27,48 @@ import Foundation
     }
     
     // MARK: - User Intents
-    func shuffleVocab(for lessonNum: Int) {
-        if let index = getLessonIndex(num: lessonNum) {
-            lessonsModel.lessons[index].vocabList.shuffle()
+    
+    // Shuffle the vocab flashcards for the Study section
+    func shuffleFlashcards(for vocabList: [(String, String)]) -> [(String, String)] {
+        return vocabList.shuffled()
+    }
+    
+    // Generate four answer options including the correct one for the Quiz
+    func generateQuizAnswers(for lessonNum: Int, correctAnswer: String) -> [String] {
+        if let lessonIndex = getLessonIndex(num: lessonNum) {
+            var answers = lessonsModel.lessons[lessonIndex].vocabList.map { $0.1 }.filter { $0 != correctAnswer }
+            answers.shuffle()
+            answers = Array(answers.prefix(3))
+            answers.append(correctAnswer)
+            
+            return answers.shuffled()
+        }
+        else {
+            return []
         }
     }
     
-    func handleLearnCompleteTap(num: Int) {
+    func updateHighScore(for num: Int, withNewScore newHighscore: Int) {
         if let index = getLessonIndex(num: num) {
-            lessonsModel.lessons[index].toggleIsLearnComplete()
+            lessonsModel.lessons[index].highScore = newHighscore
+            persistentScores.updateHighScore(for: "lesson\(num)", newHighScore: newHighscore)
+        }
+    }
+    
+    func updateMostRecentScore(for num: Int, withNewScore newRecentScore: Int) {
+        if let index = getLessonIndex(num: num) {
+            lessonsModel.lessons[index].mostRecentScore = newRecentScore
+            persistentScores.updateMostRecentScore(for: "lesson\(num)", newRecentScore: newRecentScore)
+        }
+    }
+    
+    func handleLearnCompleteTap(for num: Int) {
+        if let index = getLessonIndex(num: num) {
+            if !lessonsModel.lessons[index].isLearnCompleted {
+                playCorrectAnswerSound()
+            }
             
+            lessonsModel.lessons[index].toggleIsLearnComplete()
             persistentProgress.updateProgress(
                 for: "lesson\(num)",
                 item: "isLearnCompleted",
@@ -41,8 +76,12 @@ import Foundation
         }
     }
     
-    func handleStudyCompleteTap(num: Int) {
+    func handleStudyCompleteTap(for num: Int) {
         if let index = getLessonIndex(num: num) {
+            if !lessonsModel.lessons[index].isStudyCompleted {
+                playCorrectAnswerSound()
+            }
+            
             lessonsModel.lessons[index].toggleIsStudyComplete()
             persistentProgress.updateProgress(
                 for: "lesson\(num)",
@@ -51,8 +90,12 @@ import Foundation
         }
     }
     
-    func handleQuizCompleteTap(num: Int) {
+    func handleQuizCompleteTap(for num: Int) {
         if let index = getLessonIndex(num: num) {
+            if !lessonsModel.lessons[index].isQuizCompleted {
+                playCorrectAnswerSound()
+            }
+            
             lessonsModel.lessons[index].toggleIsQuizComplete()
             persistentProgress.updateProgress(
                 for: "lesson\(num)",
@@ -61,13 +104,30 @@ import Foundation
         }
     }
     
+    func playCorrectAnswerSound() {
+        Task {
+            await soundPlayer.playSound(named: "Correct_answer.mp3")
+        }
+    }
+    
+    func playBadAnswerSound() {
+        Task {
+            await soundPlayer.playSound(named: "Bad_answer.mp3")
+        }
+    }
+    
+    func playLevelCompleteSound() {
+        Task {
+            await soundPlayer.playSound(named: "Level_complete.mp3")
+        }
+    }
     
     // MARK: - Helpers
     private func getLessonIndex(num: Int) -> Int? {
         return lessonsModel.lessons.firstIndex(where: {$0.num == num})
     }
     
-    private func loadLessonProgress() {
+    private func loadPersistentLessonProgress() {
         for lesson in lessonsModel.lessons {
             let persistentLessonKey = "lesson\(lesson.num)"
             
@@ -77,6 +137,21 @@ import Foundation
                     lessonsModel.lessons[lessonIndex].isLearnCompleted = progress["isLearnCompleted"] ?? false
                     lessonsModel.lessons[lessonIndex].isStudyCompleted = progress["isStudyCompleted"] ?? false
                     lessonsModel.lessons[lessonIndex].isQuizCompleted = progress["isQuizCompleted"] ?? false
+                }
+                
+            }
+        }
+    }
+    
+    private func loadPersistentScores() {
+        for lesson in lessonsModel.lessons {
+            let persistentScoresLessonKey = "lesson\(lesson.num)"
+            
+            if let lessonIndex = getLessonIndex(num: lesson.num) {
+                
+                if let scores = persistentScores.scoreStorage[persistentScoresLessonKey] {
+                    lessonsModel.lessons[lessonIndex].highScore = scores["highScore"] ?? 0
+                    lessonsModel.lessons[lessonIndex].mostRecentScore = scores["mostRecentScore"] ?? 0
                 }
                 
             }

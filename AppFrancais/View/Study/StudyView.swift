@@ -11,6 +11,7 @@ struct StudyView: View {
     @EnvironmentObject var lessonViewModel: LessonsViewModel
     var lesson: LessonsModel.Lesson
     
+    @State private var flashcards: [(String, String)] = []
     @State private var currentIndex = 0
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
@@ -25,7 +26,6 @@ struct StudyView: View {
     var body: some View {
         VStack {
             ScrollView {
-                //            Text("\(lesson.name)").font(.largeTitle)
                 HStack {
                     Image(systemName: "rectangle.on.rectangle.circle")
                         .foregroundColor(!lesson.isStudyCompleted ? .gray : .green)
@@ -38,14 +38,14 @@ struct StudyView: View {
                         VStack {
                             TabView(selection: $currentIndex) {
                                 // learned .indices from ChatGPT before you mentioned it in the midterm review
-                                ForEach(lesson.vocabList.indices, id: \.self) { index in
-                                    FlashcardView(vocab: lesson.vocabList[index])
+                                ForEach(flashcards.indices, id: \.self) { index in
+                                    FlashcardView(vocab: flashcards[index])
                                         .tag(index)
                                         .padding()
                                 }
                             }
                             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-                            .background(Constants.flashCardsBackgroundColor)
+                            .background(.bar)
                             .cornerRadius(10)
                             // this shrinks the gray area
 //                            .frame(height: geometry.size.height - 50)
@@ -100,15 +100,17 @@ struct StudyView: View {
                 
                 Spacer()
             }
-                CompleteButtonView(
-                    activity: "Study",
-                    isCompleted: lesson.isStudyCompleted,
-                    handlePress: { lessonViewModel.handleStudyCompleteTap(num: lesson.num) }
-                )
-            }
             .onAppear {
-                lessonViewModel.shuffleVocab(for: lesson.num)
+                flashcards = lessonViewModel.shuffleFlashcards(for: lesson.vocabList)
             }
+            
+            CompleteButtonView(
+                activity: "Study",
+                isCompleted: lesson.isStudyCompleted,
+                handlePress: { lessonViewModel.handleStudyCompleteTap(for: lesson.num) }
+            )
+        }
+            
 
     }
         
@@ -117,7 +119,7 @@ struct StudyView: View {
     
     // MARK: - Drawing Constants
     private struct Constants {
-        static let flashCardsBackgroundColor: Color = Color(red: 0.95, green: 0.95, blue: 0.95)
+//        static let flashCardsBackgroundColor: Color = Color(red: 0.95, green: 0.95, blue: 0.95)
     }
     
 }
