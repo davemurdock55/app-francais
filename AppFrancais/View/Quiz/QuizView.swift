@@ -8,31 +8,45 @@
 import SwiftUI
 
 struct QuizView: View {
+    
+    // MARK: - Imported Variables
     @EnvironmentObject var lessonViewModel: LessonsViewModel
     var lesson: LessonsModel.Lesson
     
+    // MARK: - State Variables
     @State private var isTakingQuiz: Bool = false
     
     @State private var score: Int = 0
     
     @State private var currentQuestionIndex = 0
-    @State private var correctAnswer: String
     @State private var answers: [String] = []
     @State private var selectedAnswer: String? = nil
+    @State private var showCorrectAnswer = false
+    @State private var anyIncorrectAnswers: Bool = false
     
-    @State private var showAnswer = false
-    
-    @State private var timeRemaining: Double = 10.0
+    @State private var timeRemaining: Double = Constants.initialBonusTime
     @State private var timer: Timer? = nil
     
     @State private var celebrate: Bool = false
     
-    init(lesson: LessonsModel.Lesson) {
-        self.lesson = lesson
-        correctAnswer = lesson.vocabList[0].1
+    // MARK: - Computed Variables
+    private var numQuestions: Int {
+        lesson.vocabList.count
     }
     
+    private var currentQuestionNum: Int {
+        currentQuestionIndex + 1
+    }
     
+    private var currentQuestionWord: String {
+        lesson.vocabList[currentQuestionIndex].0
+    }
+    
+    private var correctAnswer: String {
+        lesson.vocabList[currentQuestionIndex].1
+    }
+
+    // MARK: - View
     var body: some View {
         VStack {
             HStack {
@@ -42,12 +56,13 @@ struct QuizView: View {
             }.font(.title)
             
             ScrollView {
-                if !lesson.isQuizCompleted {
+                
+                if isTakingQuiz {
                     // Score
                     Text("Score: \(score)").font(.title2).fontWeight(.medium)
                     
                     // Timer Circle
-                    QuizTimerView(timeRemaining: $timeRemaining)
+                    QuizTimer(timeRemaining: $timeRemaining)
                         .onAppear {
                             startTimer()
                         }
@@ -57,116 +72,30 @@ struct QuizView: View {
                     
                     
                     // Question Area
-                    
-//                    QuestionsView()
-                    VStack(alignment: .leading) {
-                        // Question # and Question
-                        Text("Question \(currentQuestionIndex + 1) / \(lesson.vocabList.count)")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .padding(.bottom, 5)
-                        Group {
-                            Text("What does ") +
-                            Text(lesson.vocabList[currentQuestionIndex].0)
-                                .bold().foregroundStyle(.blue) +
-                            Text(" mean in English?")
-                        }
-                        .font(.title2).padding(.bottom, 25)
-                        
-                        // Answers
-                        ForEach(answers, id: \.self) { answer in
-                            Button {
-                                if !showAnswer {
-                                    selectedAnswer = selectedAnswer != answer ? answer : nil
-                                }
-                            } label: {
-                                HStack {
-                                    if showAnswer && selectedAnswer == answer {
-                                        Image(systemName: selectedAnswer == correctAnswer ? "checkmark.circle.fill" : "x.circle.fill").foregroundStyle(selectedAnswer == correctAnswer ? .green : .red)
-                                    } else if showAnswer && correctAnswer == answer {
-                                        Image(systemName: "checkmark.circle").foregroundStyle(.green)
-                                    } else {
-                                        Image(systemName: selectedAnswer == answer ? "inset.filled.circle" : "circle.circle").foregroundStyle(.blue)
-                                    }
-                                    Text(answer).foregroundStyle(Color.black)
-                                    Spacer()
-                                }
-                                .padding(15)
-                                .background(.bar)
-                                .cornerRadius(10)
-                            }
-                            .frame(maxWidth: .infinity)
-                        }
-                    }
-                    .padding()
+                    QuestionsView(lesson: lesson,
+                          currentQuestionIndex: $currentQuestionIndex,
+                          numQuestions: numQuestions,
+                          currentQuestionNum: currentQuestionNum,
+                          correctAnswer: correctAnswer,
+                          currentQuestionWord: currentQuestionWord,
+                          answers: $answers,
+                          selectedAnswer: $selectedAnswer,
+                          showCorrectAnswer: $showCorrectAnswer
+                    )
                     
                     Spacer()
                     
                     // Check Answer / Next Buttons
                     Group {
-                        if showAnswer {
-                            Button {
-                                goToNextQuestion()
-                            } label: {
-                                HStack {
-                                    Text("Next")
-                                    Image(systemName: "arrow.forward")
-                                }
-                                .frame(maxWidth: .infinity)
-                            }
-                            .padding()
-                            .background(selectedAnswer == correctAnswer ? .green : .red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .frame(maxWidth: .infinity)
+                        if showCorrectAnswer {
+                            NextQuestionButton(goToNextQuestion: goToNextQuestion, selectedAnswer: $selectedAnswer, correctAnswer: correctAnswer)
                         } else {
-                            Button {
-                                if let selectedAnswer {
-                                    checkAnswer(selected: selectedAnswer, correct: lesson.vocabList[currentQuestionIndex].1)
-                                }
-                            } label: {
-                                Label("Check Answer", systemImage: "checkmark.circle.badge.questionmark")
-                                    .frame(maxWidth: .infinity)
-//                                Text("Check Answer")
-                            }
-                            .padding()
-                            .background((selectedAnswer != nil) ? Color.blue : Color.gray)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .opacity(selectedAnswer != nil ? 1.0 : 0.5)
-                            .disabled(selectedAnswer == nil)
-                            .frame(maxWidth: .infinity)
+                            CheckAnswerButton(checkAnswer: checkAnswer, selectedAnswer: $selectedAnswer, correctAnswer: correctAnswer)
                         }
                     }.padding(.horizontal)
-                } else {
-                    // Quiz Finished Screen
-                    Text("You finished the quiz for Lesson \(lesson.num): \(lesson.name)!")
-                        .padding()
-                    
-                    Text("Your Score: \(lesson.mostRecentScore)").font(.title).fontWeight(.semibold)
-                    Text("Your High Score: \(lesson.highScore)").font(.title3)
-                    
-                    Button {
-                        withAnimation {
-                            resetQuiz()
-                        }
-                    } label: {
-                        Label("Restart Quiz", systemImage: "arrow.counterclockwise")
-                            
-                    }
-                    .padding(15)
-                    .background(.blue)
-                    .foregroundColor(.white)
-                    .fontWeight(.bold)
-                    .cornerRadius(10)
-                    
-                    Spacer()
-                    
-                    CompleteButtonView(
-                        activity: "Quiz",
-                        isCompleted: lesson.isQuizCompleted,
-                        handlePress: { lessonViewModel.handleQuizCompleteTap(for: lesson.num) }
-                    )
+                } else if (currentQuestionNum) >= numQuestions {
+                    // Quiz EndScreen
+                    QuizScoreView(lesson: lesson, anyIncorrectAnswers: $anyIncorrectAnswers, resetQuiz: resetQuiz)
                 }
                 
             }
@@ -177,6 +106,7 @@ struct QuizView: View {
         }
     }
 
+    // MARK: - Quiz Helper Functions
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
             withAnimation(.linear) {
@@ -211,20 +141,20 @@ struct QuizView: View {
                 }
             }
         } else if selected != correct {
+            anyIncorrectAnswers = true
             lessonViewModel.playBadAnswerSound()
         }
-        showAnswer = true
+        showCorrectAnswer = true
     }
     
     private func goToNextQuestion() {
-        if (currentQuestionIndex + 1) < lesson.vocabList.count {
+        if (currentQuestionNum) < numQuestions {
             celebrate = false
             currentQuestionIndex += 1
-            correctAnswer = lesson.vocabList[currentQuestionIndex].1
             answers = lessonViewModel.generateQuizAnswers(for: lesson.num, correctAnswer: correctAnswer)
             selectedAnswer = nil
-            showAnswer = false
-            timeRemaining = 10.0
+            showCorrectAnswer = false
+            timeRemaining = Constants.initialBonusTime
             startTimer()
         }
         // Finished Quiz
@@ -233,10 +163,18 @@ struct QuizView: View {
             if score > lesson.highScore {
                 lessonViewModel.updateHighScore(for: lesson.num, withNewScore: score)
             }
-            celebrate = true
-            lessonViewModel.handleQuizCompleteTap(for: lesson.num)
-            lessonViewModel.playLevelCompleteSound()
-            currentQuestionIndex = 0
+            
+            if !anyIncorrectAnswers {
+                if lesson.isQuizCompleted == false {
+                    lessonViewModel.handleQuizCompleteTap(for: lesson.num)
+                }
+                celebrate = true
+                lessonViewModel.playLevelCompleteSound()
+            } else {
+                celebrate = false
+            }
+            
+            isTakingQuiz = false
         }
     }
     
@@ -244,17 +182,23 @@ struct QuizView: View {
         score = 0
         
         currentQuestionIndex = 0
-        correctAnswer = lesson.vocabList[0].1
         answers = []
         selectedAnswer = nil
+        showCorrectAnswer = false
+        anyIncorrectAnswers = false
         
-        showAnswer = false
-        
-        answers = lessonViewModel.generateQuizAnswers(for: lesson.num, correctAnswer: lesson.vocabList[0].1)
-        
-        timeRemaining = 10.0
+        timeRemaining = Constants.initialBonusTime
         timer = nil
         
         celebrate = false
+        
+        // go get new randomized answers for the first question (based on correctAnswer)
+        answers = lessonViewModel.generateQuizAnswers(for: lesson.num, correctAnswer: correctAnswer)
+        
+        isTakingQuiz = true
+    }
+    
+    private struct Constants {
+        static let initialBonusTime = 10.0
     }
 }

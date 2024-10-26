@@ -26,7 +26,7 @@ struct Cardify: ViewModifier {
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             ZStack {
-                RoundedRectangle(cornerRadius: 10).fill(.white)
+                RoundedRectangle(cornerRadius: SharedConstants.cornerRadius).fill(.white)
                     .shadow(color: Constants.dropShadowColor,
                             radius: Constants.dropShadowRadius,
                             x: Constants.dropShadowX,

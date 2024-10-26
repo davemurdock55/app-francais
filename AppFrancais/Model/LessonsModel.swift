@@ -10,7 +10,6 @@ import Foundation
 typealias VocabListType = [(String, String)]
 
 struct LessonsModel {
-    // MARK: - Constants
     
     // MARK: - Nested Structs
     struct Lesson: Identifiable {

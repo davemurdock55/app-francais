@@ -15,20 +15,20 @@ struct LessonsListView: View {
             NavigationStack {
                 VStack {
                     ZStack {
+                        // French Flag
                         HStack {
                             Rectangle()
                                 .fill(Color.blue)
-                                .frame(height: geometry.size.height / 3)
+                                .frame(height: geometry.size.height / Constants.flagThird)
                             Rectangle()
                                 .fill(Color.white)
-                                .frame(height: geometry.size.height / 3)
+                                .frame(height: geometry.size.height / Constants.flagThird)
                             Rectangle()
                                 .fill(Color.red)
-                                .frame(height: geometry.size.height / 3)
+                                .frame(height: geometry.size.height / Constants.flagThird)
                         }
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(RoundedRectangle(cornerRadius: SharedConstants.cornerRadius))
                         Text("Bonjour!")
-//                            .foregroundColor(.black)
                             .font(.largeTitle)
 //                            .font(.system(size: 45)) // did get font size from AI
 //                            .foregroundColor(Color(red: 0, green: 0, blue: 0.5))
@@ -45,19 +45,19 @@ struct LessonsListView: View {
                                     Text(lesson.name)
                                         .font(.subheadline)
                                         .foregroundStyle(.secondary)
-                                }.padding(.vertical, 16)
+                                }.padding(.vertical, Constants.listItemVerticalPadding)
                                 
                                 Spacer()
                                 
                                 HStack {
                                     Image(systemName: lesson.isLearnCompleted ? "graduationcap.circle.fill" : "graduationcap.circle")
-                                        .font(.system(size: 24))
+                                        .font(.system(size: Constants.iconSize))
                                         .foregroundColor(lesson.isLearnCompleted ? .green : .blue)
                                     Image(systemName: lesson.isStudyCompleted ? "rectangle.on.rectangle.circle.fill" : "rectangle.on.rectangle.circle")
-                                        .font(.system(size: 24))
+                                        .font(.system(size: Constants.iconSize))
                                         .foregroundColor(lesson.isStudyCompleted ? .green : .gray)
                                     Image(systemName: lesson.isQuizCompleted ? "questionmark.circle.fill" : "questionmark.circle")
-                                        .font(.system(size: 24))
+                                        .font(.system(size: Constants.iconSize))
                                         .foregroundColor(lesson.isQuizCompleted ? .green : .red)
                                 }
                             }
@@ -69,6 +69,12 @@ struct LessonsListView: View {
             }
         }
     }
+}
+
+private struct Constants {
+    static let iconSize: Double = 24
+    static let flagThird: Double = 3
+    static let listItemVerticalPadding: Double = 16
 }
 
 #Preview {

@@ -25,7 +25,7 @@ struct CompleteButtonView: View {
         .background(!isCompleted ? Color.green : Color.gray)
         .foregroundColor(.white)
         .fontWeight(.bold)
-        .cornerRadius(10)
-        .opacity(!isCompleted ? 1.0 : 0.5)
+        .cornerRadius(SharedConstants.cornerRadius)
+        .opacity(!isCompleted ? SharedConstants.fullOpacity : SharedConstants.halfOpacity)
     }
 }

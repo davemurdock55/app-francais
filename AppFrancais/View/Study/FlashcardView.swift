@@ -17,7 +17,7 @@ struct FlashcardView: View {
             VStack {
                 Spacer()
                 ZStack {
-                    RoundedRectangle(cornerRadius: 10).fill(.white)
+                    RoundedRectangle(cornerRadius: SharedConstants.cornerRadius).fill(.white)
                         .shadow(color: Constants.dropShadowColor,
                                 radius: Constants.dropShadowRadius,
                                 x: Constants.dropShadowX,
@@ -52,6 +52,7 @@ struct FlashcardView: View {
             isFrenchSide.toggle()
         }
     }
+    
     
     // MARK: - Drawing Constants
     private struct Constants {

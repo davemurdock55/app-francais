@@ -1,5 +1,5 @@
 //
-//  QuizTimerView.swift
+//  QuizTimer.swift
 //  AppFrancais
 //
 //  Created by David Murdock on 10/25/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct QuizTimerView: View {
+struct QuizTimer: View {
 //    var timeRemaining: Double
 //    var timer: Timer?
     @Binding var timeRemaining: Double

@@ -46,7 +46,7 @@ struct StudyView: View {
                             }
                             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
                             .background(.bar)
-                            .cornerRadius(10)
+                            .cornerRadius(SharedConstants.cornerRadius)
                             // this shrinks the gray area
 //                            .frame(height: geometry.size.height - 50)
                         }
@@ -71,7 +71,7 @@ struct StudyView: View {
                         .frame(width: 150)
                         .background(.blue)
                         .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .cornerRadius(SharedConstants.cornerRadius)
                     }
                     
                     
@@ -92,7 +92,7 @@ struct StudyView: View {
                         .frame(width: 150)
                         .background(.blue)
                         .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .cornerRadius(SharedConstants.cornerRadius)
                     }
                     
                 }.padding()
@@ -113,13 +113,6 @@ struct StudyView: View {
             
 
     }
-        
-    
 
-    
-    // MARK: - Drawing Constants
-    private struct Constants {
-//        static let flashCardsBackgroundColor: Color = Color(red: 0.95, green: 0.95, blue: 0.95)
-    }
-    
+
 }
