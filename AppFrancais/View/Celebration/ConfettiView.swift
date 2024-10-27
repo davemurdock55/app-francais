@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// Got this from online (source above)
 struct ConfettiView: View {
     @State var animate = false
     @State var xSpeed = Double.random(in: 0.7...2)

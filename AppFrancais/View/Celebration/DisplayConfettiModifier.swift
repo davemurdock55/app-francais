@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// Got this from online (source above)
 struct DisplayConfettiModifier: ViewModifier {
     @Binding var isActive: Bool {
         didSet {

@@ -30,11 +30,10 @@ struct LessonsListView: View {
                         .clipShape(RoundedRectangle(cornerRadius: SharedConstants.cornerRadius))
                         Text("Bonjour!")
                             .font(.largeTitle)
-//                            .font(.system(size: 45)) // did get font size from AI
-//                            .foregroundColor(Color(red: 0, green: 0, blue: 0.5))
                             .fontWeight(.bold)
                     }
                     
+                    // List of Lessons
                     List(lessonsViewModel.lessons, id: \.self.num) { lesson in
                         // had some help from the AI to get the NavigationLink working properly (and a bit of the inside stuff)
                         NavigationLink(destination: LessonContentView(lesson: lesson)) {
@@ -71,6 +70,7 @@ struct LessonsListView: View {
     }
 }
 
+// MARK: - Constants
 private struct Constants {
     static let iconSize: Double = 24
     static let flagThird: Double = 3

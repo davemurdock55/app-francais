@@ -14,7 +14,6 @@ struct LearnView: View {
     var body: some View {
         VStack {
             ScrollView {
-//                Text("\(lesson.name)").font(.largeTitle)
                 HStack {
                     Image(systemName: "graduationcap.circle")
                         .foregroundColor(!lesson.isLearnCompleted ? .blue : .green)

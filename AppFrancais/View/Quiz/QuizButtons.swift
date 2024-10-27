@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct StartQuizButton: View {
-//    @EnvironmentObject var lessonViewModel: LessonsViewModel
     var goToNextQuestion: () -> Void
     
     var body: some View {
@@ -29,17 +28,18 @@ struct StartQuizButton: View {
 }
 
 struct NextQuestionButton: View {
-//    @EnvironmentObject var lessonViewModel: LessonsViewModel
     var goToNextQuestion: () -> Void
     @Binding var selectedAnswer: String?
     let correctAnswer: String
+    @Binding var showCorrectAnswer: Bool
+    @State private var buttonScale: CGFloat = Constants.defaultButtonScale
     
     var body: some View {
         Button {
             goToNextQuestion()
         } label: {
             HStack {
-                Text("Next")
+                Text("Next").bold()
                 Image(systemName: "arrow.forward")
             }
             .frame(maxWidth: .infinity)
@@ -49,12 +49,20 @@ struct NextQuestionButton: View {
         .foregroundColor(.white)
         .cornerRadius(SharedConstants.cornerRadius)
         .frame(maxWidth: .infinity)
+        .scaleEffect(buttonScale)
+        .onAppear {
+            withAnimation(.easeIn(duration: Constants.animationDuration)) {
+                buttonScale = Constants.enlargedButtonScale
+            }
+            withAnimation(.easeIn(duration: Constants.animationDuration).delay(Constants.animationDelay)) {
+                buttonScale = Constants.defaultButtonScale
+            }
+        }
     }
 }
 
 
 struct CheckAnswerButton: View {
-//    @EnvironmentObject var lessonViewModel: LessonsViewModel
     var checkAnswer: (String, String) -> Void
     @Binding var selectedAnswer: String?
     let correctAnswer: String
@@ -66,8 +74,8 @@ struct CheckAnswerButton: View {
             }
         } label: {
             Label("Check Answer", systemImage: "checkmark.circle.badge.questionmark")
+                .bold()
                 .frame(maxWidth: .infinity)
-//                                Text("Check Answer")
         }
         .padding()
         .background((selectedAnswer != nil) ? Color.blue : Color.gray)
@@ -77,4 +85,12 @@ struct CheckAnswerButton: View {
         .disabled(selectedAnswer == nil)
         .frame(maxWidth: .infinity)
     }
+}
+
+// MARK: - Constants
+private struct Constants {
+    static let defaultButtonScale = 1.0
+    static let enlargedButtonScale = 1.025
+    static let animationDuration = 0.1
+    static let animationDelay = 0.5
 }

@@ -21,7 +21,7 @@ import Foundation
     }
     
     // MARK: - Model access
-    // AI did help me with this a bit
+    // AI did help me with this
     var lessons: [LessonsModel.Lesson] {
         return lessonsModel.lessons
     }
@@ -29,11 +29,13 @@ import Foundation
     // MARK: - User Intents
     
     // Shuffle the vocab flashcards for the Study section
+    // learned from AI there is a difference between .shuffle() and .shuffled()
     func shuffleFlashcards(for vocabList: [(String, String)]) -> [(String, String)] {
         return vocabList.shuffled()
     }
     
     // Generate four answer options including the correct one for the Quiz
+    // I did use AI for this out of convenience and time saving (I thought it was a cool way to use map and filter)
     func generateQuizAnswers(for lessonNum: Int, correctAnswer: String) -> [String] {
         if let lessonIndex = getLessonIndex(num: lessonNum) {
             var answers = lessonsModel.lessons[lessonIndex].vocabList.map { $0.1 }.filter { $0 != correctAnswer }
@@ -136,6 +138,7 @@ import Foundation
             if let lessonIndex = getLessonIndex(num: lesson.num) {
                 
                 if let progress = persistentProgress.progress[persistentLessonKey] {
+                    // AI helped me build out the basics for these a bit
                     lessonsModel.lessons[lessonIndex].isLearnCompleted = progress["isLearnCompleted"] ?? false
                     lessonsModel.lessons[lessonIndex].isStudyCompleted = progress["isStudyCompleted"] ?? false
                     lessonsModel.lessons[lessonIndex].isQuizCompleted = progress["isQuizCompleted"] ?? false

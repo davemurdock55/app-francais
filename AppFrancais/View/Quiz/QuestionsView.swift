@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct QuestionsView: View {
-//    @EnvironmentObject var lessonViewModel: LessonsViewModel
     var lesson: LessonsModel.Lesson
 
     @Binding var currentQuestionIndex: Int
@@ -28,14 +27,14 @@ struct QuestionsView: View {
             Text("Question \(currentQuestionNum) / \(lesson.vocabList.count)")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-                .padding(.bottom, 5)
+                .padding(.bottom, Constants.QuestionNumTextBottomPadding)
             Group {
                 Text("What does ") +
                 Text(currentQuestionWord)
                     .bold().foregroundStyle(.blue) +
                 Text(" mean in English?")
             }
-            .font(.title2).padding(.bottom, 25)
+            .font(.title2).padding(.bottom, Constants.QuestionBottomPadding)
             
             // Answers
             ForEach(answers, id: \.self) { answer in
@@ -55,7 +54,7 @@ struct QuestionsView: View {
                         Text(answer).foregroundStyle(Color.black)
                         Spacer()
                     }
-                    .padding(15)
+                    .padding(SharedConstants.standardPadding)
                     .background(.bar)
                     .cornerRadius(SharedConstants.cornerRadius)
                 }
@@ -63,5 +62,11 @@ struct QuestionsView: View {
             }
         }
         .padding()
+    }
+    
+    // MARK: - Constants
+    private struct Constants {
+        static let QuestionNumTextBottomPadding: Double = 5
+        static let QuestionBottomPadding: Double = 25
     }
 }

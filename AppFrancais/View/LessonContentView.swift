@@ -15,6 +15,7 @@ struct LessonContentView: View {
     
     var body: some View {
             VStack {
+                // did learn how to use the tags better thanks to AI
                 Picker("Select a tab", selection: $selectedTab) {
                     Text("Learn").tag(0)
                     Text("Study").tag(1)
@@ -24,8 +25,6 @@ struct LessonContentView: View {
                 .padding()
                 
                 Spacer()
-                
-                //            Text("\(lesson.name)").font(.largeTitle)
                 
                 TabView(selection: $selectedTab) {
                     LearnView(lesson: lesson)

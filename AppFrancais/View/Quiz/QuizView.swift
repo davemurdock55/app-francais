@@ -88,18 +88,36 @@ struct QuizView: View {
                     // Check Answer / Next Buttons
                     Group {
                         if showCorrectAnswer {
-                            NextQuestionButton(goToNextQuestion: goToNextQuestion, selectedAnswer: $selectedAnswer, correctAnswer: correctAnswer)
+                            NextQuestionButton(goToNextQuestion: goToNextQuestion, selectedAnswer: $selectedAnswer, correctAnswer: correctAnswer, showCorrectAnswer: $showCorrectAnswer)
                         } else {
                             CheckAnswerButton(checkAnswer: checkAnswer, selectedAnswer: $selectedAnswer, correctAnswer: correctAnswer)
                         }
-                    }.padding(.horizontal)
+                    }
+                    .padding(.horizontal)
                 } else if (currentQuestionNum) >= numQuestions {
                     // Quiz EndScreen
                     QuizScoreView(lesson: lesson, anyIncorrectAnswers: $anyIncorrectAnswers, resetQuiz: resetQuiz)
+                } else {
+                    StartQuizView(lesson: lesson, questionCount: numQuestions, isTakingQuiz: $isTakingQuiz)
                 }
                 
             }
+            
+            Spacer()
+            
+            // Show the complete button if we're NOT taking the quiz,
+            // AND ((if we've completed the quiz AND there's no incorrect answers) OR if it's already marked as completed)
+            if !isTakingQuiz &&
+               ((currentQuestionNum >= numQuestions && !anyIncorrectAnswers) || lesson.isQuizCompleted) {
+                CompleteButtonView(
+                    activity: "Quiz",
+                    isCompleted: lesson.isQuizCompleted,
+                    handlePress: { lessonViewModel.handleQuizCompleteTap(for: lesson.num) }
+                )
+                .padding(.top, SharedConstants.standardPadding)
+            }
         }
+        // Got this confetti animation from online :)
         .displayConfetti(isActive: $celebrate)
         .onAppear {
             resetQuiz()
@@ -108,10 +126,10 @@ struct QuizView: View {
 
     // MARK: - Quiz Helper Functions
     private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: Constants.timerTimeInverval, repeats: true) { _ in
             withAnimation(.linear) {
-                if timeRemaining >= 0.01 {
-                    timeRemaining -= 0.01
+                if timeRemaining >= Constants.timerTimeInverval {
+                    timeRemaining -= Constants.timerTimeInverval
                 } else {
                     stopTimer()
                 }
@@ -126,16 +144,16 @@ struct QuizView: View {
     
     private func checkAnswer(selected: String, correct: String) {
         let bonusPointsTime = timeRemaining
-        let bonusPoints = bonusPointsTime > 0.0001 ? Int(ceil(bonusPointsTime)) : 0
+        let bonusPoints = bonusPointsTime > Constants.bonusPointsTimeCutoff ? Int(ceil(bonusPointsTime)) : 0
         stopTimer()
         
         if selected == correct {
-            score += 10 + bonusPoints
+            score += Constants.basePointsAmount + bonusPoints
             lessonViewModel.playCorrectAnswerSound()
             celebrate = true
             
-            // Timeout to turn confetti off after 1 second
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            // Timeout to turn confetti off after confettiDuration (1 second)
+            DispatchQueue.main.asyncAfter(deadline: .now() + Constants.confettiDuration) {
                 withAnimation {
                     celebrate = false
                 }
@@ -144,7 +162,9 @@ struct QuizView: View {
             anyIncorrectAnswers = true
             lessonViewModel.playBadAnswerSound()
         }
-        showCorrectAnswer = true
+        withAnimation {
+            showCorrectAnswer = true
+        }
     }
     
     private func goToNextQuestion() {
@@ -195,10 +215,15 @@ struct QuizView: View {
         // go get new randomized answers for the first question (based on correctAnswer)
         answers = lessonViewModel.generateQuizAnswers(for: lesson.num, correctAnswer: correctAnswer)
         
-        isTakingQuiz = true
+        isTakingQuiz = false
     }
     
+    // MARK: - Constants
     private struct Constants {
-        static let initialBonusTime = 10.0
+        static let basePointsAmount: Int = 10
+        static let initialBonusTime: Double = 10.0
+        static let confettiDuration: Double = 1
+        static let timerTimeInverval: Double = 0.01
+        static let bonusPointsTimeCutoff: Double = 0.0001
     }
 }

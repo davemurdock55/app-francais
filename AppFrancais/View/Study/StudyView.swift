@@ -17,11 +17,10 @@ struct StudyView: View {
     
     init(lesson: LessonsModel.Lesson) {
         self.lesson = lesson
+        // changing the color of the TabView indices (found on StackOverflow)
         UIPageControl.appearance().currentPageIndicatorTintColor = .gray
         UIPageControl.appearance().pageIndicatorTintColor = .lightGray
     }
-    
-    // could possibly use onAppear() to do the shuffling each time the study activity loads
     
     var body: some View {
         VStack {
@@ -47,16 +46,17 @@ struct StudyView: View {
                             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
                             .background(.bar)
                             .cornerRadius(SharedConstants.cornerRadius)
-                            // this shrinks the gray area
-//                            .frame(height: geometry.size.height - 50)
+                            // this shrinks the gray area (keeping in case I want it later)
+                            // .frame(height: geometry.size.height - 50)
                         }
                         .frame(height: geometry.size.height)
                     }
-                    .frame(height: 400)  // Set fixed height for the flashcards container
+                    .frame(height: Constants.flashcardsContainerWidth)
                 }.padding(.horizontal)
                 
                 HStack {
                     Button {
+                        // initially used AI to come up with efficient ways to go back and forth through indices
                         if currentIndex > 0 {
                             withAnimation {
                                 currentIndex -= 1
@@ -68,7 +68,7 @@ struct StudyView: View {
                             Text("Previous")
                         }
                         .padding()
-                        .frame(width: 150)
+                        .frame(width: Constants.CardNavButtonWidth)
                         .background(.blue)
                         .foregroundColor(.white)
                         .cornerRadius(SharedConstants.cornerRadius)
@@ -78,6 +78,7 @@ struct StudyView: View {
                     Spacer()
                     
                     Button {
+                        // initially used AI to come up with efficient ways to go back and forth through indices
                         if currentIndex < lesson.vocabList.count - 1 {
                             withAnimation {
                                 currentIndex += 1
@@ -89,7 +90,7 @@ struct StudyView: View {
                             Image(systemName: "chevron.forward.circle")
                         }
                         .padding()
-                        .frame(width: 150)
+                        .frame(width: Constants.CardNavButtonWidth)
                         .background(.blue)
                         .foregroundColor(.white)
                         .cornerRadius(SharedConstants.cornerRadius)
@@ -110,9 +111,12 @@ struct StudyView: View {
                 handlePress: { lessonViewModel.handleStudyCompleteTap(for: lesson.num) }
             )
         }
-            
-
     }
 
-
+    // MARK: - Constants
+    private struct Constants {
+        static let CardNavButtonWidth: Double = 150
+        static let flashcardsContainerWidth: Double = 400
+    }
+    
 }
